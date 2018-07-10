@@ -8,30 +8,29 @@
     tools:context="com.example.jonfi.audiorecorder.MainActivity">
 
 
-    <Button
-        android:id="@+id/buttRecord"
+    <Switch
+        android:id="@+id/swiRecord"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:textSize="64px"
+        android:layout_marginTop="8dp"
         android:text="Record" />
-
-    <Button
-        android:id="@+id/buttStopRecording"
+    <Switch
+        android:id="@+id/swiPlay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/buttRecord"
-        android:text="Stop recording" />
-
-    <Button
-        android:id="@+id/buttStopPlaying"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/buttPlay"
-        android:text="Stop playing" />
-
-    <Button
-        android:id="@+id/buttPlay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/buttStopRecording"
+        android:layout_alignParentStart="true"
+        android:textSize="64px"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/swiRecord"
         android:text="Play" />
+    <TextView
+        android:id="@+id/test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="64px"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/swiPlay"/>
 </RelativeLayout>
