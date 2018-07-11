@@ -12,6 +12,9 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 
@@ -21,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     TextView test;
 
     String mFileName = null;
+    File audioFile;
+    FileOutputStream outputStream;
 
     // Requesting permission to RECORD_AUDIO
     private boolean permissionToRecordAccepted = false;
@@ -59,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
         mFileName = getExternalCacheDir().getAbsolutePath();
         mFileName += "/audiorecordtest.3gp";
 
+        File audioFile=new File(MainActivity.this.getFilesDir(),"audiorecordtest.3gp");
+
+
 
         swiRecord.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -82,6 +90,16 @@ public class MainActivity extends AppCompatActivity {
                     mMediaRecorder.stop();
                     mMediaRecorder.release();
                     mMediaRecorder=null;
+
+                    try {
+                        outputStream=openFileOutput("audiorecordtest.3gp",MODE_PRIVATE);
+                        outputStream.write(mFileName.getBytes());
+                        outputStream.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -107,11 +125,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     private void MediaRecorderReady() {
         mMediaRecorder=new MediaRecorder();
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mMediaRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
         mMediaRecorder.setOutputFile(mFileName);
+
     }
 }
