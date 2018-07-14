@@ -4,28 +4,32 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+
+import static android.os.Environment.getExternalStoragePublicDirectory;
 
 
 public class MainActivity extends AppCompatActivity {
 
     Switch swiRecord, swiPlay;
+    Button buttReadFile;
     TextView test;
 
     String mFileName = null;
-    File audioFile;
-    FileOutputStream outputStream;
+    File file;
 
     // Requesting permission to RECORD_AUDIO
     private boolean permissionToRecordAccepted = false;
@@ -56,17 +60,23 @@ public class MainActivity extends AppCompatActivity {
 
         swiRecord=(Switch)findViewById(R.id.swiRecord);
         swiPlay=(Switch)findViewById(R.id.swiPlay);
-
+        buttReadFile=(Button)findViewById(R.id.buttReadFile);
 
         test=(TextView)findViewById(R.id.test);
         test.setText("off");
 
-        mFileName = getExternalCacheDir().getAbsolutePath();
+
+
+
+        if(isExternalStorageWritable())    {
+            mFileName=getExternalFilesDir(Environment.DIRECTORY_MUSIC)
+                    .getAbsolutePath();
+        }else {
+            mFileName = getExternalCacheDir().getAbsolutePath();
+        }
+
         mFileName += "/audiorecordtest.3gp";
-
-        File audioFile=new File(MainActivity.this.getFilesDir(),"audiorecordtest.3gp");
-
-
+        test.setText(mFileName);
 
         swiRecord.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -81,25 +91,13 @@ public class MainActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
                     mMediaRecorder.start();
-
                 }else   {
                     test.setText("off");
 
                     mMediaRecorder.stop();
                     mMediaRecorder.release();
                     mMediaRecorder=null;
-
-                    try {
-                        outputStream=openFileOutput("audiorecordtest.3gp",MODE_PRIVATE);
-                        outputStream.write(mFileName.getBytes());
-                        outputStream.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }
             }
         });
@@ -123,15 +121,30 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        buttReadFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
 
     private void MediaRecorderReady() {
-        mMediaRecorder=new MediaRecorder();
+        mMediaRecorder = new MediaRecorder();
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mMediaRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
         mMediaRecorder.setOutputFile(mFileName);
-
     }
+
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
 }

@@ -33,4 +33,14 @@
         android:textSize="64px"
         android:layout_marginTop="8dp"
         android:layout_below="@+id/swiPlay"/>
+
+    <Button
+        android:id="@+id/buttReadFile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Read file"
+        android:textSize="64px"
+        android:layout_marginBottom="8dp" />
 </RelativeLayout>
